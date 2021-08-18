@@ -7,6 +7,9 @@ if [[ ! -f func.yaml || ! -f src/index.ts ]] ; then
 fi
 
 cat >> $plan <<EOM
+[[provides]]
+  name = "func-framework"
+
 [[requires]]
   name = "node"
 
@@ -20,4 +23,7 @@ cat >> $plan <<EOM
   [requires.metadata]
     build = true
     launch = true
+
+[[requires]]
+  name = "func-framework"
 EOM

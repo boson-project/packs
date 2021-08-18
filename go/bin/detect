@@ -7,10 +7,16 @@ if [[ ! -f func.yaml || ! -f go.mod ]] ; then
 fi
 
 cat >> $plan <<EOM
+[[provides]]
+  name = "func-framework"
+
 [[requires]]
   name = "go"
 
   [requires.metadata]
     build = true
     launch = false
+
+[[requires]]
+  name = "func-framework"
 EOM
