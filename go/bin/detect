@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -eo pipefail
+plan=$2
+
+if [[ ! -f func.yaml || ! -f go.mod ]] ; then
+  exit 100
+fi
+
+cat >> $plan <<EOM
+[[requires]]
+  name = "go"
+
+  [requires.metadata]
+    build = true
+    launch = false
+EOM

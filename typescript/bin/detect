@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -eo pipefail
+plan=$2
+
+if [[ ! -f func.yaml || ! -f src/index.ts ]] ; then
+  exit 100
+fi
+
+cat >> $plan <<EOM
+[[requires]]
+  name = "node"
+
+  [requires.metadata]
+    build = true
+    launch = true
+
+[[requires]]
+  name = "node_modules"
+
+  [requires.metadata]
+    build = true
+    launch = true
+EOM

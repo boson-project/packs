@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "> Knative Functions Typescript Buildpack"
+
+build_dir="$(pwd)"
+bp_dir=$(cd "$(dirname "$0")"/..; pwd)
+layers_dir="$1"
+
+if [ -f build/index.js ] ; then
+  echo "  build/index.js found - skipping build"
+  exit
+fi
+
+echo "  Running build script"
+# Run the build script
+npm run build --if-present

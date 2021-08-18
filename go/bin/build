@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "> Knative Functions Go Buildpack"
+
+build_dir="$(pwd)"
+bp_dir=$(cd "$(dirname "$0")"/..; pwd)
+layers_dir="$1"
+
+# INJECT INVOCATION SCAFFOLDING (main)
+cp -r $bp_dir/faas $build_dir/faas
+mkdir -p $build_dir/bin
+
+echo "  Fetching framework dependencies"
+go get function/faas
+
+echo "  Executing: go build -o $build_dir/bin/faas $build_dir/faas"
+go build -o $build_dir/bin/faas $build_dir/faas
+
+# PLACE COMPILED BINARY IN APP LAYER FOR LAUNCH
+app_layer="$layers_dir/app"
+mkdir -p "$app_layer"
+cat > "$app_layer.toml" << EOF
+launch = true
+build = false
+cache = false
+EOF
+
+cp $build_dir/bin/faas "$app_layer/faas"
+chmod u+w -R $build_dir
+rm -fr $build_dir/* $build_dir/.[a-z]*
+
+# LAUNCHER
+cat > "$layers_dir/launch.toml" << EOF
+[[processes]]
+type = "web"
+command = "$app_layer/faas -V"
+EOF
+

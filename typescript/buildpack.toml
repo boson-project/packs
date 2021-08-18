@@ -1,0 +1,9 @@
+api = "0.2"
+
+[buildpack]
+id = "dev.knative-sandbox.typescript"
+version = "0.0.2"
+name = "Typescript Function Buildpack"
+
+[[stacks]]
+id = "io.buildpacks.stacks.bionic"

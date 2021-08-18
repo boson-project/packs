@@ -1,0 +1,12 @@
+api = "0.2"
+
+[buildpack]
+id = "dev.knative-sandbox.go"
+version = "0.0.2"
+name = "Go Function Buildpack"
+
+[[stacks]]
+id = "io.paketo.stacks.tiny"
+
+[[stacks]]
+id = "io.buildpacks.stacks.bionic"
