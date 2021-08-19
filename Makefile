@@ -3,11 +3,11 @@
 all: go typescript
 
 go:
-	pack buildpack package --path go docker.io/lanceball/boson-go
+	pack buildpack package --path go docker.io/bosonproject/boson-go-buildpack
 
 typescript:
-	pack buildpack package --path typescript docker.io/lanceball/boson-typescript
+	pack buildpack package --path typescript docker.io/bosonproject/boson-typescript-buildpack
 
 push:
-	docker push docker.io/lanceball/boson-go
-	docker push docker.io/lanceball/boson-typescript
+	docker push docker.io/bosonproject/boson-go-buildpack
+	docker push docker.io/bosonproject/boson-typescript-buildpack
