@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-publish:
+    permissions:
+      contents: read
+      packages: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v2.29.2
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: simple
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Determine download URL for latest pack
+        id: pack-download-url
+        uses: actions/github-script@v2
+        with:
+          result-encoding: string
+          script: |
+            return github.repos.getReleaseByTag({
+                owner: "buildpacks",
+                repo: "pack",
+                tag: "v0.20.0"
+            }).then(result => {
+                return result.data.assets
+                  .filter(a => a.name.includes("linux"))
+                  .map(a => a.browser_download_url)[0];
+            })
+      - name: Install pack
+        run: |
+          curl -s -L -o pack.tgz ${{ steps.pack-download-url.outputs.result }}
+          tar -xvf pack.tgz
+      - name: Build
+        run: PACK_CMD="$(pwd)/pack" make
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Images
+        run: make publish
