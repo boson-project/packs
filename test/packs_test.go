@@ -12,7 +12,6 @@ import (
 
 const Registry = "ghcr.io/boson-project"
 
-type templates []string
 type testCase struct {
 	Name       string
 	Runtime    string
@@ -51,9 +50,12 @@ func TestPacksTable(t *testing.T) {
 	t.Logf("Buildpack image version under test: %v", version)
 
 	for _, tc := range testCases(version) {
+		tc := tc
 		for _, tpl := range tc.Templates {
+			tpl := tpl
 			root := fmt.Sprintf("%s/%s/%s", "testdata", tc.Runtime, tpl)
 			t.Run(root, func(t *testing.T) {
+				t.Parallel()
 				defer using(t, root)()
 
 				client := fn.New(
@@ -63,16 +65,17 @@ func TestPacksTable(t *testing.T) {
 				)
 
 				// Create a new project using the client
-				funk := fn.Function{
+				f := fn.Function{
 					Root:       root,
 					Runtime:    tc.Runtime,
 					Template:   tpl,
 					Buildpacks: tc.Buildpacks,
 				}
-				if err := client.Create(funk); err != nil {
+
+				if err := client.Create(f); err != nil {
 					t.Fatal(err)
 				}
-				if err := client.Build(context.Background(), funk.Root); err != nil {
+				if err := client.Build(context.Background(), f.Root); err != nil {
 					t.Fatal(err)
 				}
 			})
