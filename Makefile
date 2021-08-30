@@ -1,13 +1,17 @@
-.PHONY: go typescript
+PACK_CMD?=pack
 
-all: go typescript
+GIT_TAG := $(shell git tag --points-at HEAD)
+VERSION_TAG := $(shell [ -z $(GIT_TAG) ] && echo 'tip' || echo $(GIT_TAG) )
 
-go:
-	pack buildpack package --path go docker.io/bosonproject/boson-go-buildpack
+.PHONY: buildpacks publish test
 
-typescript:
-	pack buildpack package --path typescript docker.io/bosonproject/boson-typescript-buildpack
+all: buildpacks
 
-push:
-	docker push docker.io/bosonproject/boson-go-buildpack
-	docker push docker.io/bosonproject/boson-typescript-buildpack
+buildpacks:
+	./hack/make.sh buildpacks $(VERSION_TAG)
+
+publish:
+	./hack/make.sh publish $(VERSION_TAG)
+
+test: buildpacks
+	VERSION_TAG=$(VERSION_TAG) go test -v ./test/...
