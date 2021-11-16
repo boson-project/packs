@@ -1,1 +1,1 @@
-Experimental buildpacks for Boson functions.
+A Go buildpack providing scaffolding for Knative functions.
