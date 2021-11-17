@@ -7,7 +7,7 @@ VERSION="${2-tip}"
 REPOSITORY="ghcr.io/boson-project"
 PACK_CMD=${PACK_CMD:-pack}
 
-BUILDPACKS=(go typescript)
+BUILDPACKS=(go)
 
 buildpack_to_img() { echo "${REPOSITORY}/${1}-function-buildpack:${2}"; }
 
