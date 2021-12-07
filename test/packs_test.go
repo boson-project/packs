@@ -30,15 +30,6 @@ func testCases(version string) []testCase {
 			Runtime:   "go",
 			Templates: []string{"events", "http"},
 		},
-		{
-			Name: "TypeScript function buildpack",
-			Buildpacks: []string{
-				fmt.Sprintf("ghcr.io/boson-project/typescript-function-buildpack:%s", version),
-				"paketo-buildpacks/nodejs",
-			},
-			Runtime:   "typescript",
-			Templates: []string{"events", "http"},
-		},
 	}
 }
 
