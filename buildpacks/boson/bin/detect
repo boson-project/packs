@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -eo pipefail
+plan=$2 
+
+echo "> Knative Function Buildpack"
+
+if [[ ! -f func.yaml ]] ; then
+  echo "> Knative Function project not detected"
+  exit 100
+fi
+
+echo "> Knative Function project detected"
+
+cat >> $plan <<EOM
+[[provides]]
+  name = "boson"
+
+[[requires]]
+  name = "boson"
+EOM

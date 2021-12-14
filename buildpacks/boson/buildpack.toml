@@ -1,0 +1,12 @@
+api = "0.2"
+
+[buildpack]
+id = "dev.knative-sandbox.func"
+version = "0.0.2"
+name = "Function Buildpack"
+
+[[stacks]]
+id = "io.paketo.stacks.tiny"
+
+[[stacks]]
+id = "io.buildpacks.stacks.bionic"
