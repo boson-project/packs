@@ -19,4 +19,7 @@ cat >> $plan <<EOM
 
 [[requires]]
   name = "func-framework"
+
+[[requires]]
+  name = "boson"
 EOM

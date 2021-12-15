@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo ">"
+echo "> Knative Func Buildpack"
+echo ">"
+
+cat > "$1/launch.toml" << EOF
+[[processes]]
+type = "web"
+command = "echo Knative Func"
+EOF

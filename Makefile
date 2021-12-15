@@ -14,4 +14,7 @@ publish:
 	./hack/make.sh publish $(VERSION_TAG)
 
 test: buildpacks
+	# The tests in make.sh cover the base boson-function-buildpack image
+	./hack/make.sh test $(VERSION_TAG)
+	# The go tests integration with kn-plugin-func
 	VERSION_TAG=$(VERSION_TAG) go test -v ./test/...
