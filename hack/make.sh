@@ -33,12 +33,13 @@ make_publish() {
 }
 
 make_test() {
+  mkdir -p ./test/testdata/func && touch ./test/testdata/func/func.yaml
+
   # Try building in a directory known not to have a func.yaml and look for "Knative Function project not detected"
   local OUT=`$PACK_CMD build boson-func-test --pull-policy if-not-present --buildpack ghcr.io/boson-project/boson-function-buildpack:tip  -v --trust-builder --builder gcr.io/paketo-buildpacks/builder:base --path ./test/testdata`
   echo $OUT | grep "Knative Function project not detected"
 
   # Try building in a directory with a func.yaml and expect no errors
-  mkdir -p ./test/testdata/func && touch ./test/testdata/func/func.yaml
 	$PACK_CMD build boson-func-test --pull-policy if-not-present --buildpack ghcr.io/boson-project/boson-function-buildpack:tip  -v --trust-builder --builder gcr.io/paketo-buildpacks/builder:base --path ./test/testdata/func
 }
 
