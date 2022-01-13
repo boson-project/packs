@@ -3,6 +3,7 @@ set -eo pipefail
 plan=$2
 
 if [[ ! -f func.yaml || ! -f go.mod ]] ; then
+  echo "No function found"
   exit 100
 fi
 
