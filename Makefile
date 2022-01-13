@@ -13,8 +13,8 @@ buildpacks:
 builders:
 	./hack/make.sh builders $(VERSION_TAG)
 
-publish:
+publish: all
 	./hack/make.sh publish $(VERSION_TAG)
 
-test: buildpacks
+test: all
 	VERSION_TAG=$(VERSION_TAG) go test -v ./test/...

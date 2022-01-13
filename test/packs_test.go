@@ -17,6 +17,7 @@ type testCase struct {
 	Runtime    string
 	Templates  []string
 	Buildpacks []string
+	Builder    string
 }
 
 func testCases(version string) []testCase {
@@ -24,11 +25,19 @@ func testCases(version string) []testCase {
 		{
 			Name: "Go function buildpack",
 			Buildpacks: []string{
-				fmt.Sprintf("ghcr.io/boson-project/go-function-buildpack:%s", version),
 				"paketo-buildpacks/go-dist",
+				fmt.Sprintf("ghcr.io/boson-project/go-function-buildpack:%s", version),
 			},
+			Builder:   "gcr.io/paketo-buildpacks/builder:base",
 			Runtime:   "go",
-			Templates: []string{"events", "http"},
+			Templates: []string{"cloudevents", "http"},
+		},
+		{
+			Name:       "Go function builder",
+			Builder:    fmt.Sprintf("ghcr.io/boson-project/go-function-builder:%s", version),
+			Buildpacks: []string{},
+			Runtime:    "go",
+			Templates:  []string{"cloudevents", "http"},
 		},
 	}
 }
@@ -38,15 +47,14 @@ func TestPacksTable(t *testing.T) {
 	if !found {
 		version = "tip"
 	}
-	t.Logf("Buildpack image version under test: %v", version)
+	t.Logf("Version under test: %v", version)
 
 	for _, tc := range testCases(version) {
 		tc := tc
 		for _, tpl := range tc.Templates {
 			tpl := tpl
 			root := fmt.Sprintf("%s/%s/%s", "testdata", tc.Runtime, tpl)
-			t.Run(root, func(t *testing.T) {
-				t.Parallel()
+			t.Run(fmt.Sprintf("%s %s", tc.Name, tpl), func(t *testing.T) {
 				defer using(t, root)()
 
 				client := fn.New(
@@ -61,6 +69,7 @@ func TestPacksTable(t *testing.T) {
 					Runtime:    tc.Runtime,
 					Template:   tpl,
 					Buildpacks: tc.Buildpacks,
+					Builder:    tc.Builder,
 				}
 
 				if err := client.Create(f); err != nil {
