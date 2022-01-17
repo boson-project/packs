@@ -9,9 +9,7 @@ env:
 
 jobs:
   build-and-publish:
-    permissions:
-      contents: write
-      packages: write
+    permissions: write-all
 
     runs-on: ubuntu-latest
     steps:
