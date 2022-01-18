@@ -7,9 +7,10 @@ on:
 env:
   REGISTRY: ghcr.io
 
+permissions: write-all
+
 jobs:
   build-and-publish:
-    permissions: write-all
 
     runs-on: ubuntu-latest
     steps:
