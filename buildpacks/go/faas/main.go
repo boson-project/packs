@@ -12,9 +12,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gorilla/mux"
-
 	cloudevents "github.com/cloudevents/sdk-go/v2"
+	"github.com/go-chi/chi/v5"
 
 	function "function"
 )
@@ -51,7 +50,7 @@ func run() error {
 	}()
 
 	// Use a gorilla mux for handling all HTTP requests
-	router := mux.NewRouter()
+	router := chi.NewRouter()
 
 	// Add handlers for readiness and liveness endpoints
 	router.HandleFunc("/health/{endpoint:readiness|liveness}", func(w http.ResponseWriter, r *http.Request) {
