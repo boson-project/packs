@@ -27,7 +27,7 @@ jobs:
 
       - uses: buildpacks/github-actions/setup-pack@v4.1.0
         with:
-          pack-version: 0.23.0
+          pack-version: 0.29.0
 
       - name: Build
         run: make
