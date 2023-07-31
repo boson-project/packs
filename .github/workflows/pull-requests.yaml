@@ -25,10 +25,10 @@ jobs:
             return github.repos.getReleaseByTag({
                 owner: "buildpacks",
                 repo: "pack",
-                tag: "v0.20.0"
+                tag: "v0.29.0"
             }).then(result => {
                 return result.data.assets
-                  .filter(a => a.name.includes("linux"))
+                  .filter(a => a.name.includes("linux."))
                   .map(a => a.browser_download_url)[0];
             })
 
