@@ -21,6 +21,7 @@ go build -o $build_dir/bin/faas $build_dir/faas
 app_layer="$layers_dir/app"
 mkdir -p "$app_layer"
 cat > "$app_layer.toml" << EOF
+[types]
 launch = true
 build = false
 cache = false
