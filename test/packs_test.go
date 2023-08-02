@@ -75,7 +75,7 @@ func TestPacksTable(t *testing.T) {
 					},
 				}
 
-				err := f.Write()
+				f, err := client.Init(f)
 				if err != nil {
 					t.Fatal(err)
 				}
