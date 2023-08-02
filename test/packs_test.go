@@ -6,8 +6,8 @@ import (
 	"os"
 	"testing"
 
-	fn "knative.dev/kn-plugin-func"
-	"knative.dev/kn-plugin-func/buildpacks"
+	"knative.dev/func/pkg/builders/buildpacks"
+	fn "knative.dev/func/pkg/functions"
 )
 
 const Registry = "ghcr.io/boson-project"
@@ -65,17 +65,22 @@ func TestPacksTable(t *testing.T) {
 
 				// Create a new project using the client
 				f := fn.Function{
-					Root:       root,
-					Runtime:    tc.Runtime,
-					Template:   tpl,
-					Buildpacks: tc.Buildpacks,
-					Builder:    tc.Builder,
+					Name:     "fn",
+					Root:     root,
+					Runtime:  tc.Runtime,
+					Template: tpl,
+					Build: fn.BuildSpec{
+						Buildpacks: tc.Buildpacks,
+						Builder:    tc.Builder,
+					},
 				}
 
-				if err := client.Create(f); err != nil {
+				f, err := client.Init(f)
+				if err != nil {
 					t.Fatal(err)
 				}
-				if err := client.Build(context.Background(), f.Root); err != nil {
+				f, err = client.Build(context.Background(), f)
+				if err != nil {
 					t.Fatal(err)
 				}
 			})
