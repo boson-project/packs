@@ -34,4 +34,5 @@ cat > "$layers_dir/launch.toml" << EOF
 [[processes]]
 type = "web"
 command = "$app_layer/faas -V"
+default = true
 EOF
