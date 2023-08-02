@@ -33,6 +33,8 @@ cp $build_dir/bin/faas "$app_layer/faas"
 cat > "$layers_dir/launch.toml" << EOF
 [[processes]]
 type = "web"
-command = "$app_layer/faas -V"
+command = "$app_layer/faas"
+args = ["-V"]
 default = true
+direct = true
 EOF
